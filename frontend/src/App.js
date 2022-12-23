@@ -1,10 +1,11 @@
-import Navbar from './Components/Navbar';
-import CreateNft from './Components/CreateNft';
-import Marketplace from './Components/Marketplace';
-import MarkForRent from './Components/MarkForRent';
-import MarkedRecord from './Components/MarkedRecord';
-import BorrowedRecord from './Components/BorrowedRecord';
-import OnRentRecord from './Components/OnRentRecord';
+import Navbar from './components/Navbar';
+import CreateNft from './components/CreateNft';
+import Marketplace from './components/Marketplace';
+import MarkForRent from './components/MarkForRent';
+import MarkedRecord from './components/MarkedRecord';
+import BorrowedRecord from './components/BorrowedRecord';
+import OnRentRecord from './components/OnRentRecord';
+import RecordInfo from './components/RecordInfo';
 import React from 'react';
 import { ContractState } from './context/contractState';
 import {
@@ -38,7 +39,7 @@ function App() {
             </Route>
 
             <Route path="/viewMarkedRecord" element={<React.Fragment>
-              <MarkedRecord></MarkedRecord>
+              <MarkedRecord/>
             </React.Fragment>}>
             </Route>
 
@@ -53,9 +54,13 @@ function App() {
             </Route>
 
             <Route path="/viewBorrowedRecord" element={<React.Fragment>
-              <BorrowedRecord></BorrowedRecord>
+              <BorrowedRecord />
             </React.Fragment>}>
             </Route>
+
+            <Route path="/record/info" element={<React.Fragment>
+              <RecordInfo />
+            </React.Fragment>}></Route>
 
           </Routes>
         </BrowserRouter>

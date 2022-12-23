@@ -90,7 +90,7 @@ let ContractState = (props) => {
         // 'getAllTx': getAllTx
     }
 
-    async function borrowToken(recId, price) {
+    async function borrowToken(recId, copies, price) {
         //validbalance
         try {
             const _signer = await Provider.provider.getSigner();
@@ -102,7 +102,7 @@ let ContractState = (props) => {
 
                 if (record && currentTimestamp >= Number(record.startTime) && currentTimestamp < Number(record.endTime)) {
                     const options = { value: Number(ethers.utils.parseEther(price)) };
-                    const tx = await _contract.borrowToken(recId, options);
+                    const tx = await _contract.borrowToken(recId, copies, options);
 
                     await tx.wait() ? console.log("Successfully buyed record") : console.log("Error buying record");
                 }
@@ -114,7 +114,7 @@ let ContractState = (props) => {
 
             }
             else {
-                // alert('Insufficient balance.');
+                alert('Insufficient balance.');
                 throw ('Insufficient balance.');
             }
         } catch (error) {

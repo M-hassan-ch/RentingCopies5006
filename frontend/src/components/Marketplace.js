@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Context from '../context/contractContext';
 import {convertToDate, } from "../utility/convertTime";
+import { useNavigate } from "react-router-dom";
 
 import axios from 'axios';
 
@@ -9,6 +10,7 @@ export default function Marketplace() {
     const context = useContext(Context);
     const contractFunction = context.contractFunction;
     const [IsDisabled, setIsDisabled] = useState(false)
+    const _navigate = useNavigate();
 
     let refresh = async () => {
         if (context.contract) {
@@ -30,17 +32,6 @@ export default function Marketplace() {
         temp();
     }, [context.account])
 
-    async function borrowRecord(recId, price) {
-        try {
-            setIsDisabled(true);
-            contractFunction.borrowToken(recId, price).then(async () => {
-                await setTimeout(refresh, 3000);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     function Card(props) {
         const [Uri, setUri] = useState(null);
 
@@ -48,7 +39,12 @@ export default function Marketplace() {
             let res = await axios.get(`https://ipfs.io/ipfs/${uri}`);
             if (res) {
                 setUri(res.data.data);
+                return true;
             }
+        }
+
+        async function navigate() {
+            _navigate('/record/info', { state: { recId: props.recId, tknId: props.tknId, name: 'Token Name', desc: "Descrition", price: props.price, copies: props.copies, imageUri: Uri} });
         }
 
         function isOdd(val) {
@@ -62,11 +58,11 @@ export default function Marketplace() {
                     <div>Price: {props.price}</div>
                     <div>Expiration time: {convertToDate(props.endTime)}</div>
 
-                    {extractUri(props.uri) &&
+                    {extractUri(props.uri) && (Uri) &&
                         <div><img src={`https://ipfs.io/ipfs/${Uri}`} alt="Image" height={'200px'} width={'250px'} /></div>
                     }
                     <div>
-                        <div><button className="btn btn-primary mt-4 px-4 py-2" type='button' onClick={() => borrowRecord(props.recId, props.price)} disabled={IsDisabled}><b>Borrow</b></button></div>
+                        <div><button className="btn btn-primary mt-4 px-4 py-2" type='button' onClick={() => navigate()} ><b>View</b></button></div>
                     </div>
                 </div>
                 {!(isOdd((props.index) + 1)) && (<div className="w-100"></div>)}
