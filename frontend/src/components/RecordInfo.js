@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import Context from '../context/contractContext';
 // import { convertToDate, } from "../utility/convertTime";
@@ -8,31 +8,52 @@ export default function RecordInfo() {
   const context = useContext(Context);
   const contractFunction = context.contractFunction;
   const { state } = useLocation();
-  const { recId, tknId, name, desc, price, copies, imageUri } = state;
+  const { recId, tknId, name, desc, price, copies, imageUri, lender } = state;
   const [IsDisabled, setIsDisabled] = useState(false);
   const _navigate = useNavigate();
 
-  async function borrowRecord(recId, price) {
+  async function borrowRecord() {
     const noOfCopies = parseInt(document.getElementById("copies").value);
-    if (noOfCopies <= copies) {
+    
+    if (noOfCopies > 0 && noOfCopies <= copies) {
       try {
         setIsDisabled(true);
-        contractFunction.borrowToken(recId, noOfCopies, `${parseInt(price)*noOfCopies}`).then(async () => {
-          setIsDisabled(false);
+
+        const result = await contractFunction.borrowToken(recId, noOfCopies, `${parseInt(price) * noOfCopies}`);
+        
+        if (result) {
           _navigate('/viewOnRentRecord');
-        }).catch((err) => {
+        }
+        else {
+          setIsDisabled(false);
           alert('Borrow token transaction failed');
-        });
+        }
+
       } catch (error) {
         alert('Error occured while borrowing record')
         setIsDisabled(false);
         console.log(error);
       }
     }
-    else{
+    else {
       alert('Invalid no. of copies');
     }
   }
+
+  let refresh = async () => {
+    if (context.contract) {
+      if (lender == context.account.address) {
+        _navigate('/marketplace');
+      }
+    }
+  }
+
+  useEffect(() => {
+    let temp = async () => {
+      await refresh();
+    }
+    temp();
+  }, [context.account])
 
 
   return (

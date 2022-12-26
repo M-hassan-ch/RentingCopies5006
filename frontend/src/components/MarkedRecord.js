@@ -60,6 +60,7 @@ export default function MarkedRecord() {
                     {props.status != '' ? <div style={{ color: 'red' }}>{props.status}</div> : <div style={{ color: 'green' }}>Valid</div>}
                     <div>Record Id: {props.recId}</div>
                     <div>TokenId: {props.tknId}</div>
+                    <div>Copies: {props.copies}</div>
                     <div>Price: {props.price}</div>
                     <div>Expiration time: {convertToDate(props.endTime)}</div>
                     {extractUri(props.uri) &&

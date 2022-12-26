@@ -9,7 +9,6 @@ export default function Marketplace() {
     const [Records, setRecords] = useState(null)
     const context = useContext(Context);
     const contractFunction = context.contractFunction;
-    const [IsDisabled, setIsDisabled] = useState(false)
     const _navigate = useNavigate();
 
     let refresh = async () => {
@@ -17,7 +16,6 @@ export default function Marketplace() {
             console.log("Updating marketplace rec list........ ")
             contractFunction.getAllMarkedRecords().then((result) => {
                 setRecords(result);
-                setIsDisabled(false);
                 console.log("Updated marketplace rec list")
             }).catch((err) => {
                 console.log(err);
@@ -44,7 +42,7 @@ export default function Marketplace() {
         }
 
         async function navigate() {
-            _navigate('/record/info', { state: { recId: props.recId, tknId: props.tknId, name: 'Token Name', desc: "Descrition", price: props.price, copies: props.copies, imageUri: Uri} });
+            _navigate('/record/info', { state: { recId: props.recId, tknId: props.tknId, name: 'Token Name', desc: "Descrition", price: props.price, copies: props.copies, imageUri: Uri, lender:props.lender} });
         }
 
         function isOdd(val) {
@@ -76,7 +74,7 @@ export default function Marketplace() {
             <div className="container">
                 <div className="row justify-content-evenly">
                     {Records && Records.map((obj, i) => {
-                        return <Card key={i} index={i} uri={obj.uri} recId={obj.recordId} tknId={obj.token_id} copies={obj.copies} startTime={obj.startTime} endTime={obj.endTime} price={obj.price} />
+                        return <Card key={i} lender = {obj.lender} index={i} uri={obj.uri} recId={obj.recordId} tknId={obj.token_id} copies={obj.copies} startTime={obj.startTime} endTime={obj.endTime} price={obj.price} />
                     })}
                 </div>
             </div>

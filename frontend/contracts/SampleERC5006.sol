@@ -186,7 +186,7 @@ contract SampleERC5006 is ERC5006, Ownable {
                 // check if the record expires
                 if (record.owner == msg.sender && record.expiry < block.timestamp)
                 {
-                     // removing recordId from the borrowed recordIds list of Borrower
+                    // removing recordId from the borrowed recordIds list of Borrower
                     removeBorrowedRecId(_lenderOnRentRecordIds[msg.sender][lenderAvailableTokens[i]][j], record.user);
 
                     // releasig lender's frozen balance
@@ -292,12 +292,14 @@ contract SampleERC5006 is ERC5006, Ownable {
         delete _markedTokenRecord[recId];
     }
 
+
     function addToAvailableTokens(address lender, uint token_id) internal {
         //if the lender does not have any copy of a token that is marked for rent then it to the available token list
         if (!(_lenderFrozenBalance[lender][token_id]>0)){
             _lenderAvailableTokens[lender].add(token_id);
         }
     }
+
 
     function deleteFromAvailableTokens(address lender, uint token_id) internal{
         // if the lender has no more copies of a token that is amrked as rent or onRent then delete that token Id
