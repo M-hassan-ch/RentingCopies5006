@@ -19,7 +19,7 @@ export default function RecordInfo() {
       try {
         setIsDisabled(true);
 
-        const result = await contractFunction.borrowToken(recId, noOfCopies, `${parseInt(price) * noOfCopies}`);
+        const result = await contractFunction.borrowToken(recId, noOfCopies, `${parseFloat(price) * noOfCopies}`);
         
         if (result) {
           _navigate('/viewOnRentRecord');
@@ -59,17 +59,17 @@ export default function RecordInfo() {
   return (
 
     <>
-      <section className='container mt-md-5'>
-        <div className='row justify-content-around '>
+      <section className='container mt-md-5 '>
+        <div className='row justify-content-center '>
 
-          <div className="col-md-3   p-0 m-0">
+          <div className="col-md-3 p-0 m-0">
             {imageUri &&
               <img src={`https://ipfs.io/ipfs/${imageUri}`} alt="Nft" height={'400'} width={'100%'} className='border border-primary rounded' />
             }
           </div>
 
-          <div className='me-auto col-md-4 p-5'>
-            <div className="row">
+          <div className='col-md-4 p-5 '>
+            <div className="row ">
               <div className="col-12">
                 <h3>Token Id: <small>{tknId}</small></h3>
                 <h6>{desc}</h6>

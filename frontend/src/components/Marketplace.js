@@ -54,6 +54,7 @@ export default function Marketplace() {
                 <div className="col-md-3 rounded shadow py-2 border border-primary">
                     <div>TokenId: {props.tknId}</div>
                     <div>Price: {props.price}</div>
+                    <div>Available Copies: {props.copies}</div>
                     <div>Expiration time: {convertToDate(props.endTime)}</div>
 
                     {extractUri(props.uri) && (Uri) &&

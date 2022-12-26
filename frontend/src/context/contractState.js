@@ -91,16 +91,37 @@ let ContractState = (props) => {
     }
 
     async function borrowToken(recId, copies, price) {
+        
+        Number.prototype.noExponents = function () {
+            var data = String(this).split(/[eE]/);
+            if (data.length == 1) return data[0];
+
+            var z = '',
+                sign = this < 0 ? '-' : '',
+                str = data[0].replace('.', ''),
+                mag = Number(data[1]) + 1;
+
+            if (mag < 0) {
+                z = sign + '0.';
+                while (mag++) z += '0';
+                return z + str.replace(/^\-/, '');
+            }
+            mag -= str.length;
+            while (mag--) z += '0';
+            return str + z;
+        }
+
         try {
             const _signer = await Provider.provider.getSigner();
             let balance = (Number(await _signer.getBalance()));
+            price = `${Number(price).noExponents()}`
+            
             if (balance >= Number(ethers.utils.parseEther(price))) {
                 let _contract = await contract.connect(Provider.signer);
-                let record = await _contract._tokenRecords(Number(recId));
+                let record = await _contract._markedTokenRecord(Number(recId));
                 const currentTimestamp = (Math.floor(Date.now() / 1000));
 
                 if (record && currentTimestamp >= Number(record.startTime) && currentTimestamp < Number(record.endTime)) {
-                    
                     const options = { value: Number(ethers.utils.parseEther(price)) };
                     const tx = await _contract.borrowToken(recId, copies, options);
 
@@ -193,7 +214,7 @@ let ContractState = (props) => {
                 const nullAddress = '0x0000000000000000000000000000000000000000';
                 let _uri = await getUri(record.tokenId);
 
-                if (_uri && record && Number(record.copies) >0 && record.lender !== nullAddress && record.lender !== await msgSender()  && currentTimestamp < Number(record.endTime)) {
+                if (_uri && record && Number(record.copies) > 0 && record.lender !== nullAddress && record.lender !== await msgSender() && currentTimestamp < Number(record.endTime)) {
 
                     let obj = {
                         recordId: Number(i),
@@ -270,12 +291,12 @@ let ContractState = (props) => {
             let records = [];
             for (let i = 0; i < tokenIds; i++) {
                 let _copies = Number(await _contract.balanceOf(account.address, i));
-                
-                if (_copies>0){
+
+                if (_copies > 0) {
                     let _uri = await getUri(i);
                     let _frozen = await _contract.frozenBalanceOf(account.address, i)
-                    
-                    if (_uri && _frozen){
+
+                    if (_uri && _frozen) {
                         let obj = {
                             token_id: i,
                             copies: _copies,
@@ -285,9 +306,9 @@ let ContractState = (props) => {
                         // console.log(obj);
                         records.push(obj);
                     }
-                    
+
                 }
-                
+
             }
 
             return (records);
@@ -313,7 +334,7 @@ let ContractState = (props) => {
                 for (let j = 0; j < recordIds.length; j++) {
                     let record = await _contract._onRentTokenRecord(Number(recordIds[j]));
                     let parentRecord = await _contract._markedTokenRecord(record.markedRecId);
-                    
+
                     let _uri = await getUri(parentRecord.tokenId);
 
                     if (_uri && record && parentRecord) {
