@@ -179,7 +179,7 @@ let ContractState = (props) => {
                         recordId: Number(recIds[i]),
                         lender: parentRecord.lender,
                         token_id: Number(parentRecord.tokenId),
-                        copies: Number(record.copies),
+                        copies: Number(record.copiesBorrowed),
                         price: ethers.utils.formatEther(ethers.BigNumber.from(`${Number(record.copiesBorrowed) * Number(parentRecord.price)}`)),
                         startTime: Number(parentRecord.startTime),
                         endTime: Number(parentRecord.endTime),

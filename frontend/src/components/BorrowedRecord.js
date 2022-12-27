@@ -46,6 +46,7 @@ export default function BorrowedRecord() {
                 <div className="col-md-3 rounded shadow py-2 border border-primary">
                     <div>Record Id: {props.recId}</div>
                     <div>TokenId: {props.tknId}</div>
+                    <div>Copies: {props.copies}</div>
                     <div>Price: {props.price}</div>
                     <div>Expiration time: {convertToDate(props.endTime)}</div>
 
