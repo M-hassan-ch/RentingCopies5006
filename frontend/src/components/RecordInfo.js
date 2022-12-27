@@ -19,10 +19,10 @@ export default function RecordInfo() {
       try {
         setIsDisabled(true);
 
-        const result = await contractFunction.borrowToken(recId, noOfCopies, `${parseFloat(price) * noOfCopies}`);
+        const result = await contractFunction.borrowToken(recId, noOfCopies, price);
         
         if (result) {
-          _navigate('/viewOnRentRecord');
+          _navigate('/viewBorrowedRecord');
         }
         else {
           setIsDisabled(false);

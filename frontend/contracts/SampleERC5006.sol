@@ -145,7 +145,7 @@ contract SampleERC5006 is ERC5006, Ownable {
         _userBorrowedRecordIds[msg.sender].push(_onRentRecId);
         
         //remove recordId from the lender's marked record list (because it is now "actually on rent")
-        removeMarkedRecId(markedRecId, _markedTokenRecord[markedRecId]);
+        // removeMarkedRecId(markedRecId, _markedTokenRecord[markedRecId]);
         
         //Updating general record detail of the lended token
         _markedTokenRecord[markedRecId].copies -= copies;
@@ -166,6 +166,7 @@ contract SampleERC5006 is ERC5006, Ownable {
 
         removeMarkedRecId(recId, _markedTokenRecord[recId]);
         _lenderFrozenBalance[msg.sender][_markedTokenRecord[recId].tokenId] -= _markedTokenRecord[recId].copies;
+        deleteFromAvailableTokens(msg.sender, _markedTokenRecord[recId].tokenId);
         removeTokenRecord(recId);
     }
 
@@ -196,10 +197,10 @@ contract SampleERC5006 is ERC5006, Ownable {
                     deleteFromAvailableTokens(record.owner, record.tokenId);
                     
                     // deleting General tokenRecord details
-                    if (_lenderOnRentRecordIds[msg.sender][lenderAvailableTokens[i]].length == 1){
-                        uint markedRecId = _onRentTokenRecord[_lenderOnRentRecordIds[msg.sender][lenderAvailableTokens[i]][j]].markedRecId;
-                        removeTokenRecord(markedRecId);
-                    }
+                    // if (_lenderOnRentRecordIds[msg.sender][lenderAvailableTokens[i]].length == 1){
+                    //     uint markedRecId = _onRentTokenRecord[_lenderOnRentRecordIds[msg.sender][lenderAvailableTokens[i]][j]].markedRecId;
+                    //     removeTokenRecord(markedRecId);
+                    // }
                     
                     // deleting Onrent General general detail record
                     delete _onRentTokenRecord[_lenderOnRentRecordIds[msg.sender][lenderAvailableTokens[i]][j]];

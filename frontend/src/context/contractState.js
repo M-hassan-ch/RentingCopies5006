@@ -14,7 +14,7 @@ let ContractState = (props) => {
     const [Provider, setProvider] = useState({ provider: null, signer: null });
 
 
-    const contractAddress = '0x38339D606245571F018dDf4DCff6927b7e186f2f';
+    const contractAddress = '0x87Bfdc938124DaA87130981a08673c7c2CD91f5d';
 
     window.ethereum.on('accountsChanged', async function (accounts) {
         if (Provider.provider) {
@@ -92,37 +92,39 @@ let ContractState = (props) => {
 
     async function borrowToken(recId, copies, price) {
         
-        Number.prototype.noExponents = function () {
-            var data = String(this).split(/[eE]/);
-            if (data.length == 1) return data[0];
+        // Number.prototype.noExponents = function () {
+        //     var data = String(this).split(/[eE]/);
+        //     if (data.length == 1) return data[0];
 
-            var z = '',
-                sign = this < 0 ? '-' : '',
-                str = data[0].replace('.', ''),
-                mag = Number(data[1]) + 1;
+        //     var z = '',
+        //         sign = this < 0 ? '-' : '',
+        //         str = data[0].replace('.', ''),
+        //         mag = Number(data[1]) + 1;
 
-            if (mag < 0) {
-                z = sign + '0.';
-                while (mag++) z += '0';
-                return z + str.replace(/^\-/, '');
-            }
-            mag -= str.length;
-            while (mag--) z += '0';
-            return str + z;
-        }
+        //     if (mag < 0) {
+        //         z = sign + '0.';
+        //         while (mag++) z += '0';
+        //         return z + str.replace(/^\-/, '');
+        //     }
+        //     mag -= str.length;
+        //     while (mag--) z += '0';
+        //     return str + z;
+        // }
 
         try {
             const _signer = await Provider.provider.getSigner();
             let balance = (Number(await _signer.getBalance()));
-            price = `${Number(price).noExponents()}`
-            
-            if (balance >= Number(ethers.utils.parseEther(price))) {
+            // price = `${Number(price).noExponents()}`
+            price = ethers.utils.parseEther(price) * copies;
+            // console.log(typeof(ethers.utils.parseEther(price)));
+            // console.log(balance, price);
+            if (balance >= price ) {
                 let _contract = await contract.connect(Provider.signer);
                 let record = await _contract._markedTokenRecord(Number(recId));
                 const currentTimestamp = (Math.floor(Date.now() / 1000));
 
                 if (record && currentTimestamp >= Number(record.startTime) && currentTimestamp < Number(record.endTime)) {
-                    const options = { value: Number(ethers.utils.parseEther(price)) };
+                    const options = { value: ethers.BigNumber.from(`${price}`)};
                     const tx = await _contract.borrowToken(recId, copies, options);
 
                     await tx.wait() ? console.log("Successfully buyed record") : console.log("Error buying record");
@@ -178,7 +180,7 @@ let ContractState = (props) => {
                         lender: parentRecord.lender,
                         token_id: Number(parentRecord.tokenId),
                         copies: Number(record.copies),
-                        price: ethers.utils.formatEther(ethers.BigNumber.from(`${record.price}`)),
+                        price: ethers.utils.formatEther(ethers.BigNumber.from(`${Number(record.copiesBorrowed) * Number(parentRecord.price)}`)),
                         startTime: Number(parentRecord.startTime),
                         endTime: Number(parentRecord.endTime),
                         lendedTo: shotenAddress(record.rentedTo),
