@@ -56,6 +56,7 @@ export default function OnRentRecord() {
                     <div>Record Id: {props.recId}</div>
                     <div>TokenId: {props.tknId}</div>
                     <div>Price: {props.price}</div>
+                    <div>Copies: {props.copies}</div>
                     <div>Expiration time: {convertToDate(props.endTime)}</div>
                     <div>Lended To: {props.lendedTo}</div>
 
