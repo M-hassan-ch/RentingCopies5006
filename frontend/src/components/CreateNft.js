@@ -136,6 +136,7 @@ export default function CreateNft() {
         } else {
           alert("Error while uploading the files");
           console.log("Error while uploading the files");
+          setIsDisabled(false);
         }
       } else {
         alert("Cant mint Nft. invalid copy or null file");
