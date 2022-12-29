@@ -19,26 +19,39 @@ function App() {
     <>
       <ContractState>
         <BrowserRouter>
-
           <Navbar />
-
           <Routes>
-            <Route path="/" element={<CreateNft /> }/>
-
-            <Route path="/mintNft" element={  <CreateNft /> }/>
-
-            <Route path="/markForRent" element={<MarkForRent />}/>
-
-            <Route path="/viewMarkedRecord" element={  <MarkedRecord/> }/>
-
-            <Route path="/viewOnRentRecord" element={    <OnRentRecord /> }/>
-
-            <Route path="/marketplace" element={ <Marketplace /> }/>
-
-            <Route path="/viewBorrowedRecord" element={   <BorrowedRecord /> }/>
-
-            <Route path="/record/info" element={    <RecordInfo /> }/>
-
+            <Route path="/" element={<React.Fragment>
+              <CreateNft />
+            </React.Fragment>}>
+            </Route>
+            <Route path="/mintNft" element={<React.Fragment>
+              <CreateNft />
+            </React.Fragment>}>
+            </Route>
+            <Route path="/markForRent" element={<React.Fragment>
+              <MarkForRent />
+            </React.Fragment>}>
+            </Route>
+            <Route path="/viewMarkedRecord" element={<React.Fragment>
+              <MarkedRecord />
+            </React.Fragment>}>
+            </Route>
+            <Route path="/viewOnRentRecord" element={<React.Fragment>
+              <OnRentRecord />
+            </React.Fragment>}>
+            </Route>
+            <Route path="/marketplace" element={<React.Fragment>
+              <Marketplace />
+            </React.Fragment>}>
+            </Route>
+            <Route path="/viewBorrowedRecord" element={<React.Fragment>
+              <BorrowedRecord />
+            </React.Fragment>}>
+            </Route>
+            <Route path="/record/info" element={<React.Fragment>
+              <RecordInfo />
+            </React.Fragment>}></Route>
           </Routes>
         </BrowserRouter>
 
